@@ -51,7 +51,7 @@ public class Car {
         return "Car{" +
                 "gasLevel=" + gasLevel +
                 ", color='" + color + '\'' +
-                ", passengers=" + passengers + (trunkContents != null ? ", trunkContents=" + trunkContents : "no trunk")
+                ", passengers=" + passengers + (trunkContents != null ? ", trunkContents=" + trunkContents : " no trunk")
                 + '}';
     }
 }
