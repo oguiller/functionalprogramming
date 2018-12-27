@@ -2,6 +2,7 @@ package com.oguiller.domain;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class Car {
@@ -80,9 +81,8 @@ public class Car {
      * Removing syntactic scafolding :)
      **/
 
-    private static final CarCriterion RED_CAR_CRITERION = (c) -> {
-        return c.color.equals("Red");
-    };
+    // Because it is single parameter method and we are only invoking the method on it we can simplify it
+    private static final CarCriterion RED_CAR_CRITERION = c -> c.color.equals("Red");
 
 //    private static final CarCriterion RED_CAR_CRITERION = /*new CarCriterion(){ */
 //
@@ -128,4 +128,16 @@ public class Car {
             return c.gasLevel >= threshold;
         }
     }
+
+
+    public static Comparator<Car> getGasComparator(){
+        return GAS_COMPARATOR;
+    }
+
+    /**
+     *  if you choose to give the types of the formal parameters to use the strict terminology, then you must use the
+     *  types in all of the parameters. If you want to take them out, you must remove them from all of the parameters
+     */
+    private static final Comparator<Car> GAS_COMPARATOR =
+            ( o1,  o2) -> o1.gasLevel - o2.getGasLevel();
 }
