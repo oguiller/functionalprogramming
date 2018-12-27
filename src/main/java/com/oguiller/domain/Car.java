@@ -75,18 +75,30 @@ public class Car {
     }
 
     /**
-     * WE ARE USING ANONYMOUS CLASS HERE
-     * It's actually existed in Java since 1.1 although it doesn't necessarily get as much use as perhaps it might.
-     * The nice thing is it allows us to create behavior and focus on the behavior of the implementation. It can have
-     * variables in it too, but we don't have to worry about coming up with a class name for everything
+     * We are now getting to the power of lambda expressions:
+     *
+     * Removing syntactic scafolding :)
      **/
-    private static final CarCriterion RED_CAR_CRITERION = new CarCriterion(){
 
-        @Override
-        public boolean test(Car c) {
-            return c.color.equals("Red");
-        }
+    private static final CarCriterion RED_CAR_CRITERION = (c) -> {
+        return c.color.equals("Red");
     };
+
+//    private static final CarCriterion RED_CAR_CRITERION = /*new CarCriterion(){ */
+//
+//       // @Override
+//        /*public boolean test*/ (/*Car */ c) -> {
+//            return c.color.equals("Red");
+//        }
+//    /*}*/;
+
+//    private static final CarCriterion RED_CAR_CRITERION = new CarCriterion(){
+//
+//        @Override
+//        public boolean test(Car c) {
+//            return c.color.equals("Red");
+//        }
+//    };
 
     // Intermidiate state
 //    private static final CarCriterion RED_CAR_CRITERION = new /*RedCarCriterion();
