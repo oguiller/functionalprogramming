@@ -28,8 +28,8 @@ class PassengerCountOrder implements Comparator<Car> {
  * we'll get the error in the place where we actually made the mistake.
  */
 @FunctionalInterface
-interface CarCriterion {
-    boolean test(Car c);
+interface Criterion<E> {
+    boolean test(E c);
 //    void doStuff();
 }
 
@@ -40,8 +40,8 @@ interface Strange {
 
 public class CarScratch {
 
-    public static void showAll(Iterable<Car> lc) {
-        for (Car c : lc) {
+    public static <E> void showAll(Iterable<E> lc) {
+        for (E c : lc) {
             System.out.println(c);
         }
 
@@ -49,10 +49,10 @@ public class CarScratch {
     }
 
 
-    public static List<Car> getCarsByCriterion(Iterable<Car> in, CarCriterion crit) {
-        List<Car> output = new ArrayList<>();
+    public static <E> List<E> getByCriterion(Iterable<E> in, Criterion<E> crit) {
+        List<E> output = new ArrayList<>();
 
-        for (Car c : in) {
+        for (E c : in) {
             if (crit.test(c)) {
                 output.add(c);
             }
@@ -72,9 +72,9 @@ public class CarScratch {
 
         showAll(cars);
 
-        showAll(getCarsByCriterion(cars, Car.getRedCarCriterion()));
+        showAll(getByCriterion(cars, Car.getRedCarCriterion()));
 
-        showAll(getCarsByCriterion(cars, Car.getGasLevelCarCriterion(6)));
+        showAll(getByCriterion(cars, Car.getGasLevelCarCriterion(6)));
 
 //        cars.sort(new PassengerCountOrder());
 
@@ -84,8 +84,8 @@ public class CarScratch {
 
         showAll(cars);
 
-        showAll(getCarsByCriterion(cars, c -> c.getPassengers().size() == 2));
-        showAll(getCarsByCriterion(cars, Car.getFourPassengerCriterion()));
+        showAll(getByCriterion(cars, c -> c.getPassengers().size() == 2));
+        showAll(getByCriterion(cars, Car.getFourPassengerCriterion()));
 
         /**
          * The essence of this particular segment has been that the idea of context is absolutely essential to creating
@@ -95,6 +95,6 @@ public class CarScratch {
          * to use a cast to specify what type of lambda we're trying to build
          */
 
-        ((CarCriterion)(c -> c.getColor().equals("Red"))).test(Car.withGasColorPassengers(0, "Red"));
+        ((Criterion<Car>)(c -> c.getColor().equals("Red"))).test(Car.withGasColorPassengers(0, "Red"));
     }
 }

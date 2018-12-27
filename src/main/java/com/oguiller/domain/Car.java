@@ -56,7 +56,7 @@ public class Car {
                 + '}';
     }
 
-    public static CarCriterion getFourPassengerCriterion(){
+    public static Criterion<Car> getFourPassengerCriterion(){
         return c -> c.getPassengers().size() == 4;
     }
 
@@ -76,7 +76,7 @@ public class Car {
      */
 
     //Factory method - Singleton
-    public static CarCriterion getRedCarCriterion(){
+    public static Criterion getRedCarCriterion(){
         return RED_CAR_CRITERION;
     }
 
@@ -87,9 +87,9 @@ public class Car {
      **/
 
     // Because it is single parameter method and we are only invoking the method on it we can simplify it
-    private static final CarCriterion RED_CAR_CRITERION = c -> c.color.equals("Red");
+    private static final Criterion<Car> RED_CAR_CRITERION = c -> c.color.equals("Red");
 
-//    private static final CarCriterion RED_CAR_CRITERION = /*new CarCriterion(){ */
+//    private static final Criterion RED_CAR_CRITERION = /*new Criterion(){ */
 //
 //       // @Override
 //        /*public boolean test*/ (/*Car */ c) -> {
@@ -97,7 +97,7 @@ public class Car {
 //        }
 //    /*}*/;
 
-//    private static final CarCriterion RED_CAR_CRITERION = new CarCriterion(){
+//    private static final Criterion RED_CAR_CRITERION = new Criterion(){
 //
 //        @Override
 //        public boolean test(Car c) {
@@ -106,9 +106,9 @@ public class Car {
 //    };
 
     // Intermidiate state
-//    private static final CarCriterion RED_CAR_CRITERION = new /*RedCarCriterion();
+//    private static final Criterion RED_CAR_CRITERION = new /*RedCarCriterion();
 //
-//    private static class RedCarCriterion implements*/ CarCriterion(){
+//    private static class RedCarCriterion implements*/ Criterion(){
 //
 //        @Override
 //        public boolean test(Car c) {
@@ -116,11 +116,11 @@ public class Car {
 //        }
 //    };
 
-    public static CarCriterion getGasLevelCarCriterion(int threshold){
+    public static Criterion getGasLevelCarCriterion(int threshold){
         return new GasLevelCarCriterion(threshold);
     }
 
-    private static class GasLevelCarCriterion  implements CarCriterion {
+    private static class GasLevelCarCriterion  implements Criterion<Car> {
 
         private int threshold;
 
