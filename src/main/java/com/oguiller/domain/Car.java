@@ -56,6 +56,11 @@ public class Car {
                 + '}';
     }
 
+    public static CarCriterion getFourPassengerCriterion(){
+        return c -> c.getPassengers().size() == 4;
+    }
+
+
     /**
      * So, you're probably starting to get the idea that constructors, public constructors, are not very flexible.
      * You'll have to have constructors, but they can be private or they can have less than public access.

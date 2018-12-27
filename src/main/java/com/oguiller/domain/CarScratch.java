@@ -34,6 +34,10 @@ interface CarCriterion {
 }
 
 
+interface Strange {
+    boolean stuff(Car c);
+}
+
 public class CarScratch {
 
     public static void showAll(Iterable<Car> lc) {
@@ -79,5 +83,18 @@ public class CarScratch {
         cars.sort(Car.getGasComparator());
 
         showAll(cars);
+
+        showAll(getCarsByCriterion(cars, c -> c.getPassengers().size() == 2));
+        showAll(getCarsByCriterion(cars, Car.getFourPassengerCriterion()));
+
+        /**
+         * The essence of this particular segment has been that the idea of context is absolutely essential to creating
+         * a lambda expression object. We have three primary places where context typically comes from. Assigning the
+         * lambda to a variable. Assigning the lambda as a method parameter. Assigning the lambda to the return value
+         * of a method. And the final form, the one that is significantly less common but completely legitimate, is
+         * to use a cast to specify what type of lambda we're trying to build
+         */
+
+        ((CarCriterion)(c -> c.getColor().equals("Red"))).test(Car.withGasColorPassengers(0, "Red"));
     }
 }
