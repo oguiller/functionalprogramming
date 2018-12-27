@@ -20,48 +20,10 @@ class PassengerCountOrder implements Comparator<Car> {
     }
 }
 
-/**
- * We have colored cars in one case and cars selected by the amount of gas in them in the other case and you can
- * probably see, that we could implement car criterion as many ways as we saw fit and the same selection mechanism
- * would just keep working. We also have the situation that we saw where, with the red car criterion, that
- * particular selection mechanism, only picks out red cars and the behavior in there is completely without any kind
- * of state at all. That object only has behavior, has no state. However, for the gas level criterion, we actually
- * have a little bit of state as well as behavior, but in both cases, the essential purpose of the object we're
- * passing as an argument is because of its behavior. The state in the gas level one, merely tweaks the behavior
- * just a little bit. The essence is, that we have passed behavior into a function so that that function can use
- * the behavior in support of its own behavior. Now interestingly, and you may well already know this, this is not a
- * new idea in object-oriented programming. When the well-known Gang of Four, Gamma, Helm, Johnson and Vlissides, put
- * together their design patterns book back in about 1994, they actually described this PAM and they called it, the
- * command PAM. So, this has a good long pedigree. Turns out, that not only is the command PAM, a well-known PAM,
- * although not perhaps as well used as it should have been in object orientation, it's also key way of doing things
- * in functional programming.
- */
-
 interface CarCriterion {
     boolean test(Car c);
 }
 
-class RedCarCriterion implements CarCriterion{
-
-    @Override
-    public boolean test(Car c) {
-        return c.getColor().equals("Red");
-    }
-}
-
-class GasLevelCarCriterion  implements CarCriterion {
-
-    private int threshold;
-
-    public GasLevelCarCriterion(int threshold){
-        this.threshold = threshold;
-    }
-
-    @Override
-    public boolean test(Car c) {
-        return c.getGasLevel() >= threshold;
-    }
-}
 
 public class CarScratch {
 
@@ -86,6 +48,7 @@ public class CarScratch {
         return output;
     }
 
+
     public static void main(String[] args) {
         List<Car> cars = Arrays.asList(
                 Car.withGasColorPassengers(6, "Red", "Pau", "Arian", "Guille"),
@@ -96,9 +59,9 @@ public class CarScratch {
 
         showAll(cars);
 
-        showAll(getCarsByCriterion(cars, new RedCarCriterion()));
+        showAll(getCarsByCriterion(cars, new Car.RedCarCriterion()));
 
-        showAll(getCarsByCriterion(cars, new GasLevelCarCriterion(6)));
+        showAll(getCarsByCriterion(cars, new Car.GasLevelCarCriterion(6)));
 
 //        cars.sort(new PassengerCountOrder());
 
