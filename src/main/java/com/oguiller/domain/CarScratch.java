@@ -20,8 +20,17 @@ class PassengerCountOrder implements Comparator<Car> {
     }
 }
 
+/**
+ * The Functional Interface annotation tells the compiler that our intention is to create lambdas based on this
+ * interface. And therefore, if we add more than one abstract method to this, whether directly by typing it the
+ * way I just did, or perhaps because we have a base interface that we are extending, then the compiler should tell
+ * us you mustn't do that to this interface. This interface should have exactly one abstract method. And then
+ * we'll get the error in the place where we actually made the mistake.
+ */
+@FunctionalInterface
 interface CarCriterion {
     boolean test(Car c);
+//    void doStuff();
 }
 
 
