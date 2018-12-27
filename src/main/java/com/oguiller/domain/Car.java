@@ -74,34 +74,36 @@ public class Car {
         return RED_CAR_CRITERION;
     }
 
-    private static final RedCarCriterion RED_CAR_CRITERION = new RedCarCriterion();
-
-
     /**
-     * So what we've seen now is that it's possible, and indeed proper, to take these criterion classes and embed them
-     * in the class for which they provide selection behaviors. Java allows us to do this. They're actually called nested
-     * classes when they're static. They may be by called inner classes if they are instance type. The reasons that we might
-     * put one class inside another typically are related to grouping or ownership.
-     *
-     * When we do that, we also provide additional access privileges so that the code inside the nested class,
-     * or the inner class, has privileged access
-     * to the fields and members of the enclosing class, and that can be quite a useful feature in its own right,
-     * but we shouldn't use it as an excuse to break a design.
-     *
-     * In our case, we decided that these classes should be static,
-     * because they relate to the concept of car as a whole. '"We're looking for red cars", not "we're asking one particular
-     * red car or one particular car to find a red car."
-     */
-
-    static class RedCarCriterion implements CarCriterion{
+     * WE ARE USING ANONYMOUS CLASS HERE
+     * It's actually existed in Java since 1.1 although it doesn't necessarily get as much use as perhaps it might.
+     * The nice thing is it allows us to create behavior and focus on the behavior of the implementation. It can have
+     * variables in it too, but we don't have to worry about coming up with a class name for everything
+     **/
+    private static final CarCriterion RED_CAR_CRITERION = new CarCriterion(){
 
         @Override
         public boolean test(Car c) {
             return c.color.equals("Red");
         }
+    };
+
+    // Intermidiate state
+//    private static final CarCriterion RED_CAR_CRITERION = new /*RedCarCriterion();
+//
+//    private static class RedCarCriterion implements*/ CarCriterion(){
+//
+//        @Override
+//        public boolean test(Car c) {
+//            return c.color.equals("Red");
+//        }
+//    };
+
+    public static CarCriterion getGasLevelCarCriterion(int threshold){
+        return new GasLevelCarCriterion(threshold);
     }
 
-    static class GasLevelCarCriterion  implements CarCriterion {
+    private static class GasLevelCarCriterion  implements CarCriterion {
 
         private int threshold;
 
