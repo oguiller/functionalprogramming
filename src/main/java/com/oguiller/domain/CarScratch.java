@@ -96,18 +96,21 @@ public class CarScratch {
          * to use a cast to specify what type of lambda we're trying to build
          */
 
-        ((Criterion<Car>)(c -> c.getColor().equals("Red"))).test(Car.withGasColorPassengers(0, "Red"));
+//        ((Criterion<Car>)(c -> c.getColor().equals("Red"))).test(Car.withGasColorPassengers(0, "Red"));
+//
+//        List<String> colors = Arrays.asList("Red", "Yellow", "Pink", "green", "Orange");
+//
+//        showAll(getByCriterion(colors, st -> st.length() > 4 ));
+//        showAll(getByCriterion(colors, st -> Character.isUpperCase(st.charAt(0))));
+//
+//        LocalDate today = LocalDate.now();
+//
+//        List<LocalDate> dates = Arrays.asList(today, today.plusDays(1), today.plusDays(7), today.minusDays(1)
+//        );
+//
+//        showAll(getByCriterion(dates, ld -> ld.isAfter(today)));
 
-        List<String> colors = Arrays.asList("Red", "Yellow", "Pink", "green", "Orange");
-
-        showAll(getByCriterion(colors, st -> st.length() > 4 ));
-        showAll(getByCriterion(colors, st -> Character.isUpperCase(st.charAt(0))));
-
-        LocalDate today = LocalDate.now();
-
-        List<LocalDate> dates = Arrays.asList(today, today.plusDays(1), today.plusDays(7), today.minusDays(1)
-        );
-
-        showAll(getByCriterion(dates, ld -> ld.isAfter(today)));
+        showAll(getByCriterion(cars, Car.getGasLevelCarCriterion(7)));
+        showAll(getByCriterion(cars, Car.getGasLevelCarCriterion(4)));
     }
 }
