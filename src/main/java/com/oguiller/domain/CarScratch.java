@@ -6,113 +6,154 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
-
 /**
- * the sort method could use the behavior defined in that object to decide, are these two objects in the right order,
- *or the wrong order and that was the basis on which it could then proceed to sort objects of a type it had never
- * seen before based on an ordering criterion that did not come to anybody's head at the time when the sort method
- * was written.
+ * the sort method could use the behavior defined in that object to decide, are these two objects in
+ * the right order, or the wrong order and that was the basis on which it could then proceed to sort
+ * objects of a type it had never seen before based on an ordering criterion that did not come to
+ * anybody's head at the time when the sort method was written.
  */
 class PassengerCountOrder implements Comparator<Car> {
 
-    @Override
-    public int compare(Car o1, Car o2) {
-        return o1.getPassengers().size() - o2.getPassengers().size();
-    }
+  @Override
+  public int compare(Car o1, Car o2) {
+    return o1.getPassengers().size() - o2.getPassengers().size();
+  }
 }
 
 /**
- * The Functional Interface annotation tells the compiler that our intention is to create lambdas based on this
- * interface. And therefore, if we add more than one abstract method to this, whether directly by typing it the
- * way I just did, or perhaps because we have a base interface that we are extending, then the compiler should tell
- * us you mustn't do that to this interface. This interface should have exactly one abstract method. And then
- * we'll get the error in the place where we actually made the mistake.
+ * The Functional Interface annotation tells the compiler that our intention is to create lambdas
+ * based on this interface. And therefore, if we add more than one abstract method to this, whether
+ * directly by typing it the way I just did, or perhaps because we have a base interface that we are
+ * extending, then the compiler should tell us you mustn't do that to this interface. This interface
+ * should have exactly one abstract method. And then we'll get the error in the place where we
+ * actually made the mistake.
  */
 @FunctionalInterface
 interface Criterion<E> {
-    boolean test(E c);
-//    void doStuff();
+  boolean test(E c);
+  //    void doStuff();
 }
 
-
 interface Strange {
-    boolean stuff(Car c);
+  boolean stuff(Car c);
 }
 
 public class CarScratch {
 
-    public static <E> void showAll(Iterable<E> lc) {
-        for (E c : lc) {
-            System.out.println(c);
-        }
+  public static <E> Criterion<E> negate(Criterion<E> crit) {
+    return x -> !crit.test(x);
+  }
 
-        System.out.println("-------------------------------");
+  /**
+   * the idea of taking behavior that is almost what you wanted and turning it into behavior that's
+   * exactly what you wanted is a key functional programming concept. In a sense, we are quite
+   * literally computing new behaviors derived from old behaviors. So to review, this all works
+   * because of this closure concept.
+   *
+   * <p>We can use the arguments to our factory function inside the behaviors created by those
+   * factory functions. Because our arguments are state and behavior, we're not limited to just
+   * checking for values, but we can actually use the behaviors as well. Result is, computation of
+   * behavior. Higher-order functions that create new functions built out of old functions.
+   */
+  public static <E> Criterion<E> and(Criterion<E> first, Criterion<E> second) {
+    return x -> first.test(x) && second.test(x);
+  }
+
+  public static <E> Criterion<E> or(Criterion<E> first, Criterion<E> second) {
+    return x -> first.test(x) || second.test(x);
+  }
+
+  public static <E> void showAll(Iterable<E> lc) {
+    for (E c : lc) {
+      System.out.println(c);
     }
 
+    System.out.println("-------------------------------");
+  }
 
-    public static <E> List<E> getByCriterion(Iterable<E> in, Criterion<E> crit) {
-        List<E> output = new ArrayList<>();
+  public static <E> List<E> getByCriterion(Iterable<E> in, Criterion<E> crit) {
+    List<E> output = new ArrayList<>();
 
-        for (E c : in) {
-            if (crit.test(c)) {
-                output.add(c);
-            }
-        }
-
-        return output;
+    for (E c : in) {
+      if (crit.test(c)) {
+        output.add(c);
+      }
     }
 
+    return output;
+  }
 
-    public static void main(String[] args) {
-        List<Car> cars = Arrays.asList(
-                Car.withGasColorPassengers(6, "Red", "Pau", "Arian", "Guille"),
-                Car.withGasColorPassengers(3, "Octarine", "Lou", "Franki"),
-                Car.withGasColorPassengers(9, "Black", "Burde", "Sandra"),
-                Car.withGasColorPassengers(7, "Green", "Nita", "Rosi", "Iria", "Uxi"),
-                Car.withGasColorPassengers(6, "Red", "Luis", "Pablo", "Paula"));
+  public static void main(String[] args) {
+    List<Car> cars =
+        Arrays.asList(
+            Car.withGasColorPassengers(6, "Red", "Pau", "Arian", "Guille"),
+            Car.withGasColorPassengers(3, "Octarine", "Lou", "Franki"),
+            Car.withGasColorPassengers(9, "Black", "Burde", "Sandra"),
+            Car.withGasColorPassengers(7, "Green", "Nita", "Rosi", "Iria", "Uxi"),
+            Car.withGasColorPassengers(6, "Red", "Luis", "Pablo", "Paula", "Uxi"));
 
-        showAll(cars);
+    showAll(cars);
 
-        showAll(getByCriterion(cars, Car.getRedCarCriterion()));
+    showAll(getByCriterion(cars, Car.getRedCarCriterion()));
 
-        showAll(getByCriterion(cars, Car.getGasLevelCarCriterion(6)));
+    showAll(getByCriterion(cars, Car.getGasLevelCarCriterion(6)));
 
-//        cars.sort(new PassengerCountOrder());
+    //        cars.sort(new PassengerCountOrder());
 
-        showAll(cars);
+    showAll(cars);
 
-        cars.sort(Car.getGasComparator());
+    cars.sort(Car.getGasComparator());
 
-        showAll(cars);
+    showAll(cars);
 
-        showAll(getByCriterion(cars, c -> c.getPassengers().size() == 2));
-        showAll(getByCriterion(cars, Car.getFourPassengerCriterion()));
+    showAll(getByCriterion(cars, c -> c.getPassengers().size() == 2));
+    showAll(getByCriterion(cars, Car.getFourPassengerCriterion()));
 
-        /**
-         * The essence of this particular segment has been that the idea of context is absolutely essential to creating
-         * a lambda expression object. We have three primary places where context typically comes from. Assigning the
-         * lambda to a variable. Assigning the lambda as a method parameter. Assigning the lambda to the return value
-         * of a method. And the final form, the one that is significantly less common but completely legitimate, is
-         * to use a cast to specify what type of lambda we're trying to build
-         */
+    /**
+     * The essence of this particular segment has been that the idea of context is absolutely
+     * essential to creating a lambda expression object. We have three primary places where context
+     * typically comes from. Assigning the lambda to a variable. Assigning the lambda as a method
+     * parameter. Assigning the lambda to the return value of a method. And the final form, the one
+     * that is significantly less common but completely legitimate, is to use a cast to specify what
+     * type of lambda we're trying to build
+     */
 
-//        ((Criterion<Car>)(c -> c.getColor().equals("Red"))).test(Car.withGasColorPassengers(0, "Red"));
-//
-//        List<String> colors = Arrays.asList("Red", "Yellow", "Pink", "green", "Orange");
-//
-//        showAll(getByCriterion(colors, st -> st.length() > 4 ));
-//        showAll(getByCriterion(colors, st -> Character.isUpperCase(st.charAt(0))));
-//
-//        LocalDate today = LocalDate.now();
-//
-//        List<LocalDate> dates = Arrays.asList(today, today.plusDays(1), today.plusDays(7), today.minusDays(1)
-//        );
-//
-//        showAll(getByCriterion(dates, ld -> ld.isAfter(today)));
+    //        ((Criterion<Car>)(c -> c.getColor().equals("Red"))).test(Car.withGasColorPassengers(0,
+    // "Red"));
+    //
+    //        List<String> colors = Arrays.asList("Red", "Yellow", "Pink", "green", "Orange");
+    //
+    //        showAll(getByCriterion(colors, st -> st.length() > 4 ));
+    //        showAll(getByCriterion(colors, st -> Character.isUpperCase(st.charAt(0))));
+    //
+    //        LocalDate today = LocalDate.now();
+    //
+    //        List<LocalDate> dates = Arrays.asList(today, today.plusDays(1), today.plusDays(7),
+    // today.minusDays(1)
+    //        );
+    //
+    //        showAll(getByCriterion(dates, ld -> ld.isAfter(today)));
 
-        showAll(getByCriterion(cars, Car.getGasLevelCarCriterion(7)));
-        showAll(getByCriterion(cars, Car.getGasLevelCarCriterion(4)));
+    //        showAll(getByCriterion(cars, Car.getGasLevelCarCriterion(7)));
+    //        showAll(getByCriterion(cars, Car.getGasLevelCarCriterion(4)));
+    //
+    //        showAll(getByCriterion(cars, Car.getColorCriterion("Red", "Yellow", "Green")));
 
-        showAll(getByCriterion(cars, Car.getColorCriterion("Red", "Yellow", "Green")));
-    }
+    Criterion<Car> level7 = Car.getGasLevelCarCriterion(7);
+    showAll(getByCriterion(cars, level7));
+
+    Criterion<Car> notLevel7 = CarScratch.negate(level7);
+    showAll(getByCriterion(cars, notLevel7));
+
+    Criterion<Car> isRed = Car.getColorCriterion("Red");
+    Criterion<Car> fourPassengers = Car.getFourPassengerCriterion();
+
+    Criterion<Car> redFourPassengers = CarScratch.and(isRed, fourPassengers);
+    showAll(getByCriterion(cars, redFourPassengers));
+
+    Criterion<Car> isBlack = Car.getColorCriterion("Black");
+    Criterion<Car> blackOrFourPassengers = CarScratch.or(isBlack, fourPassengers);
+
+    showAll(getByCriterion(cars, blackOrFourPassengers));
+  }
 }
