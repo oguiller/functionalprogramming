@@ -1,9 +1,6 @@
 package com.oguiller.domain;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 public class Car {
     private int gasLevel;
@@ -115,6 +112,13 @@ public class Car {
 //            return c.color.equals("Red");
 //        }
 //    };
+
+
+    public static Criterion<Car> getColorCriterion(String ... colors){
+        Set<String> colorSet = new HashSet<>(Arrays.asList(colors));
+        return (Car c) -> colorSet.contains(c.color);
+    }
+
 
     /**
      *  What you'll typically discover is that the value of the variable is a pointer to another object. Here we have

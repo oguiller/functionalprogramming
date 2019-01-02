@@ -112,5 +112,7 @@ public class CarScratch {
 
         showAll(getByCriterion(cars, Car.getGasLevelCarCriterion(7)));
         showAll(getByCriterion(cars, Car.getGasLevelCarCriterion(4)));
+
+        showAll(getByCriterion(cars, Car.getColorCriterion("Red", "Yellow", "Green")));
     }
 }
