@@ -116,7 +116,17 @@ public class Car {
 //        }
 //    };
 
-    public static Criterion<Car> getGasLevelCarCriterion(int threshold) {
+    /**
+     *  What you'll typically discover is that the value of the variable is a pointer to another object. Here we have
+     * a primitive, and that's a little more restrictive. But if it's a pointer to another object, final merely means
+     * that you can't point that variable at another object. It doesn't mean that you can't change the object's content,
+     * that is to say change the contents of the object that you refer to. So if you want the flexibility of changing
+     * the value of that argument, you might very well be able to do it, though again, in general, it's probably not
+     * something we want to do in a functional programming style.
+     */
+
+    public static Criterion<Car> getGasLevelCarCriterion(final int threshold) {
+//                threshold = threshold +
                 return  (Car c) -> c.gasLevel >= threshold;
     }
 
