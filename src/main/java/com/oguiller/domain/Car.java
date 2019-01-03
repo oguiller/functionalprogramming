@@ -1,5 +1,7 @@
 package com.oguiller.domain;
 
+import com.oguiller.Criterion;
+
 import java.util.*;
 
 public class Car {

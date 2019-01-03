@@ -1,5 +1,7 @@
 package com.oguiller.domain;
 
+import com.oguiller.Criterion;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,48 +22,12 @@ class PassengerCountOrder implements Comparator<Car> {
   }
 }
 
-/**
- * The Functional Interface annotation tells the compiler that our intention is to create lambdas
- * based on this interface. And therefore, if we add more than one abstract method to this, whether
- * directly by typing it the way I just did, or perhaps because we have a base interface that we are
- * extending, then the compiler should tell us you mustn't do that to this interface. This interface
- * should have exactly one abstract method. And then we'll get the error in the place where we
- * actually made the mistake.
- */
-@FunctionalInterface
-interface Criterion<E> {
-  boolean test(E c);
-  //    void doStuff();
-}
 
 interface Strange {
   boolean stuff(Car c);
 }
 
 public class CarScratch {
-
-  public static <E> Criterion<E> negate(Criterion<E> crit) {
-    return x -> !crit.test(x);
-  }
-
-  /**
-   * the idea of taking behavior that is almost what you wanted and turning it into behavior that's
-   * exactly what you wanted is a key functional programming concept. In a sense, we are quite
-   * literally computing new behaviors derived from old behaviors. So to review, this all works
-   * because of this closure concept.
-   *
-   * <p>We can use the arguments to our factory function inside the behaviors created by those
-   * factory functions. Because our arguments are state and behavior, we're not limited to just
-   * checking for values, but we can actually use the behaviors as well. Result is, computation of
-   * behavior. Higher-order functions that create new functions built out of old functions.
-   */
-  public static <E> Criterion<E> and(Criterion<E> first, Criterion<E> second) {
-    return x -> first.test(x) && second.test(x);
-  }
-
-  public static <E> Criterion<E> or(Criterion<E> first, Criterion<E> second) {
-    return x -> first.test(x) || second.test(x);
-  }
 
   public static <E> void showAll(Iterable<E> lc) {
     for (E c : lc) {
@@ -142,17 +108,17 @@ public class CarScratch {
     Criterion<Car> level7 = Car.getGasLevelCarCriterion(7);
     showAll(getByCriterion(cars, level7));
 
-    Criterion<Car> notLevel7 = CarScratch.negate(level7);
+    Criterion<Car> notLevel7 = level7.negate();
     showAll(getByCriterion(cars, notLevel7));
 
     Criterion<Car> isRed = Car.getColorCriterion("Red");
     Criterion<Car> fourPassengers = Car.getFourPassengerCriterion();
 
-    Criterion<Car> redFourPassengers = CarScratch.and(isRed, fourPassengers);
+    Criterion<Car> redFourPassengers = isRed.and(fourPassengers);
     showAll(getByCriterion(cars, redFourPassengers));
 
     Criterion<Car> isBlack = Car.getColorCriterion("Black");
-    Criterion<Car> blackOrFourPassengers = CarScratch.or(isBlack, fourPassengers);
+    Criterion<Car> blackOrFourPassengers = isBlack.or(fourPassengers);
 
     showAll(getByCriterion(cars, blackOrFourPassengers));
   }
