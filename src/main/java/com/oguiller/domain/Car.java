@@ -1,8 +1,8 @@
 package com.oguiller.domain;
 
-import com.oguiller.Criterion;
 
 import java.util.*;
+import java.util.function.Predicate;
 
 public class Car {
     private int gasLevel;
@@ -55,7 +55,7 @@ public class Car {
                 + '}';
     }
 
-    public static Criterion<Car> getFourPassengerCriterion(){
+    public static Predicate<Car> getFourPassengerCriterion(){
         return c -> c.getPassengers().size() == 4;
     }
 
@@ -75,8 +75,8 @@ public class Car {
      */
 
     //Factory method - Singleton
-    public static Criterion getRedCarCriterion(){
-        return RED_CAR_CRITERION;
+    public static Predicate getRedCarPredicate(){
+        return RED_CAR_PREDICATE;
     }
 
     /**
@@ -86,9 +86,9 @@ public class Car {
      **/
 
     // Because it is single parameter method and we are only invoking the method on it we can simplify it
-    private static final Criterion<Car> RED_CAR_CRITERION = c -> c.color.equals("Red");
+    private static final Predicate<Car> RED_CAR_PREDICATE = c -> c.color.equals("Red");
 
-//    private static final Criterion RED_CAR_CRITERION = /*new Criterion(){ */
+//    private static final Criterion RED_CAR_PREDICATE = /*new Criterion(){ */
 //
 //       // @Override
 //        /*public boolean test*/ (/*Car */ c) -> {
@@ -96,7 +96,7 @@ public class Car {
 //        }
 //    /*}*/;
 
-//    private static final Criterion RED_CAR_CRITERION = new Criterion(){
+//    private static final Criterion RED_CAR_PREDICATE = new Criterion(){
 //
 //        @Override
 //        public boolean test(Car c) {
@@ -105,7 +105,7 @@ public class Car {
 //    };
 
     // Intermidiate state
-//    private static final Criterion RED_CAR_CRITERION = new /*RedCarCriterion();
+//    private static final Criterion RED_CAR_PREDICATE = new /*RedCarCriterion();
 //
 //    private static class RedCarCriterion implements*/ Criterion(){
 //
@@ -116,7 +116,7 @@ public class Car {
 //    };
 
 
-    public static Criterion<Car> getColorCriterion(String ... colors){
+    public static Predicate<Car> getColorCriterion(String ... colors){
         Set<String> colorSet = new HashSet<>(Arrays.asList(colors));
         return (Car c) -> colorSet.contains(c.color);
     }
@@ -131,7 +131,7 @@ public class Car {
      * something we want to do in a functional programming style.
      */
 
-    public static Criterion<Car> getGasLevelCarCriterion(final int threshold) {
+    public static Predicate<Car> getGasLevelCarCriterion(final int threshold) {
 //                threshold = threshold +
                 return  (Car c) -> c.gasLevel >= threshold;
     }

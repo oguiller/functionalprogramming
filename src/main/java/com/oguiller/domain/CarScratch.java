@@ -1,13 +1,11 @@
 package com.oguiller.domain;
 
-import com.oguiller.Criterion;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
-
+import java.util.function.Predicate;
 /**
  * the sort method could use the behavior defined in that object to decide, are these two objects in
  * the right order, or the wrong order and that was the basis on which it could then proceed to sort
@@ -37,7 +35,7 @@ public class CarScratch {
     System.out.println("-------------------------------");
   }
 
-  public static <E> List<E> getByCriterion(Iterable<E> in, Criterion<E> crit) {
+  public static <E> List<E> getByCriterion(Iterable<E> in, Predicate<E> crit) {
     List<E> output = new ArrayList<>();
 
     for (E c : in) {
@@ -60,7 +58,7 @@ public class CarScratch {
 
     showAll(cars);
 
-    showAll(getByCriterion(cars, Car.getRedCarCriterion()));
+    showAll(getByCriterion(cars, Car.getRedCarPredicate()));
 
     showAll(getByCriterion(cars, Car.getGasLevelCarCriterion(6)));
 
@@ -105,20 +103,20 @@ public class CarScratch {
     //
     //        showAll(getByCriterion(cars, Car.getColorCriterion("Red", "Yellow", "Green")));
 
-    Criterion<Car> level7 = Car.getGasLevelCarCriterion(7);
+    Predicate<Car> level7 = Car.getGasLevelCarCriterion(7);
     showAll(getByCriterion(cars, level7));
 
-    Criterion<Car> notLevel7 = level7.negate();
+    Predicate<Car> notLevel7 = level7.negate();
     showAll(getByCriterion(cars, notLevel7));
 
-    Criterion<Car> isRed = Car.getColorCriterion("Red");
-    Criterion<Car> fourPassengers = Car.getFourPassengerCriterion();
+    Predicate<Car> isRed = Car.getColorCriterion("Red");
+    Predicate<Car> fourPassengers = Car.getFourPassengerCriterion();
 
-    Criterion<Car> redFourPassengers = isRed.and(fourPassengers);
+    Predicate<Car> redFourPassengers = isRed.and(fourPassengers);
     showAll(getByCriterion(cars, redFourPassengers));
 
-    Criterion<Car> isBlack = Car.getColorCriterion("Black");
-    Criterion<Car> blackOrFourPassengers = isBlack.or(fourPassengers);
+    Predicate<Car> isBlack = Car.getColorCriterion("Black");
+    Predicate<Car> blackOrFourPassengers = isBlack.or(fourPassengers);
 
     showAll(getByCriterion(cars, blackOrFourPassengers));
   }
