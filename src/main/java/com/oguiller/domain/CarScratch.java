@@ -6,6 +6,8 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.function.ToIntFunction;
+
 /**
  * the sort method could use the behavior defined in that object to decide, are these two objects in
  * the right order, or the wrong order and that was the basis on which it could then proceed to sort
@@ -26,6 +28,14 @@ interface Strange {
 }
 
 public class CarScratch {
+
+  public static <E>ToIntFunction<E> compareWithThis(E e, Comparator<E> comp){
+      return x -> comp.compare(e, x);
+  }
+
+  public static <E> Predicate<E> comparesGreater(ToIntFunction<E> comp) {
+    return x -> comp.applyAsInt(x) < 0;
+  }
 
   public static <E> void showAll(Iterable<E> lc) {
     for (E c : lc) {
@@ -119,5 +129,18 @@ public class CarScratch {
     Predicate<Car> blackOrFourPassengers = isBlack.or(fourPassengers);
 
     showAll(getByCriterion(cars, blackOrFourPassengers));
+
+    Car passat = Car.withGasColorPassengers(5, "Blue");
+
+    ToIntFunction<Car> compareWithPassat = compareWithThis(passat, Car.getGasComparator());
+
+    for (Car c: cars) {
+      System.out.println("Comparing " + c + " with Passat gives " + compareWithPassat.applyAsInt(c));
+    }
+
+    System.out.println("----------------------");
+
+    showAll(getByCriterion(cars, comparesGreater(compareWithPassat)));
+
   }
 }
