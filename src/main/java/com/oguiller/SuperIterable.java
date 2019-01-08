@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 /**
@@ -21,11 +22,12 @@ public class SuperIterable<E> implements Iterable<E> {
 
   public SuperIterable<E> filter(Predicate<E> pred) {
     List<E> filteredElements = new ArrayList<>();
-    for (E e : self) {
-      if (pred.test(e)) {
-        filteredElements.add(e);
-      }
-    }
+
+    self.forEach( e -> {
+        if(pred.test(e))
+            filteredElements.add(e);
+    });
+
     return new SuperIterable<E>(filteredElements);
   }
 
@@ -33,6 +35,12 @@ public class SuperIterable<E> implements Iterable<E> {
   public Iterator<E> iterator() {
     return self.iterator();
   }
+
+//  public void forEvery(Consumer<E> consumer){
+//      for(E e: self){
+//          consumer.accept(e);
+//      }
+//  }
 
   public static void main(String[] args) {
     SuperIterable<String> strings =
@@ -45,13 +53,12 @@ public class SuperIterable<E> implements Iterable<E> {
     SuperIterable<String> upperCase = strings.filter(s -> Character.isUpperCase(s.charAt(0)));
 
     System.out.println("----------------------------");
-    for (String s : upperCase) {
-      System.out.println("> " + s);
-    }
+//    upperCase.forEvery(x -> System.out.println("> " + x));
+      upperCase.forEach(x -> System.out.println("> " + x));
+
 
     System.out.println("----------------------------");
-    for (String s : strings) {
-      System.out.println("> " + s);
-    }
+    strings.forEach(x -> System.out.println("> " + x));
+
   }
 }
