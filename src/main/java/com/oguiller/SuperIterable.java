@@ -5,7 +5,10 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Predicate;
+
+import com.oguiller.domain.Car;
 
 /**
  * So the idea here is we've built a wrapper to hold data. And then we can build into that wrapper the ability to pass
@@ -29,6 +32,12 @@ public class SuperIterable<E> implements Iterable<E> {
     });
 
     return new SuperIterable<E>(filteredElements);
+  }
+
+  public <F> SuperIterable<F> map(Function<E,F> function){
+    List<F> results = new ArrayList<>();
+    self.forEach( e -> results.add(function.apply(e)));
+    return new SuperIterable<F>(results);
   }
 
   @Override
@@ -60,5 +69,28 @@ public class SuperIterable<E> implements Iterable<E> {
     System.out.println("----------------------------");
     strings.forEach(x -> System.out.println("> " + x));
 
+    System.out.println("----------------------------");
+    strings.filter(x -> Character.isUpperCase(x.charAt(0)))
+                    .map(x -> x.toUpperCase())
+                    .forEach(x -> System.out.println("> " + x));
+
+      System.out.println("----------------------------");
+      strings.forEach(x -> System.out.println("> " + x));
+
+    List<Car> cars =
+                    Arrays.asList(
+                                    Car.withGasColorPassengers(6, "Red", "Pau", "Arian", "Guille"),
+                                    Car.withGasColorPassengers(3, "Octarine", "Lou", "Franki"),
+                                    Car.withGasColorPassengers(9, "Black", "Burde", "Sandra"),
+                                    Car.withGasColorPassengers(7, "Green", "Nita", "Rosi", "Iria", "Uxi"),
+                                    Car.withGasColorPassengers(6, "Red", "Luis", "Pablo", "Paula", "Uxi"));
+
+    System.out.println("----------------------------");
+
+    SuperIterable<Car> carIter = new SuperIterable<Car>(cars);
+    carIter
+                    .filter(c-> c.getGasLevel() > 6)
+                    .map(c -> c.getPassengers().get(0) + " is driving a " + c.getColor() + " with lots of fuel")
+                    .forEach(e -> System.out.println("> " + e));
   }
 }
